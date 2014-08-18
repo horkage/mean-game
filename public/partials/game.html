@@ -1,0 +1,82 @@
+<div ng-controller="GameController">
+<!-- game controller says hi: {{ game }} -->
+
+<h1>Qritter Qrunch</h1> 
+
+<!-- This should be the current user: {{ user }} -->
+
+<!--
+<div ng-controller="ModalController">
+  <script type="text/ng-template" id="myModalContent.html">
+    <h3>no i is a modal..I think..</h3>
+    you passed: {{ which }}<br />
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+  </script>
+  <button class="btn btn-default" ng-click="open('one')">Open One</button><br />
+  <button class="btn btn-default" ng-click="open('two')">Open Two</button>
+</div>
+-->
+
+<a href="/logout">LOGOUT HERE FOO</a><br><br>
+
+<!-- <div ng-controller="TestController"><button ng-click="showDude()">Show Dude</button> {{ dude }}</div> -->
+
+    <div class="row">
+      <!--
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">Auction House</div>
+          <div class="panel-body">
+            crap gear here
+          </div>
+        </div>
+      </div>
+      -->
+      <div class="col-md-8">
+        <div class="panel panel-primary">
+          <div class="panel-heading">Qritters Never Qrit</div>
+          <div class="panel-body" ng-controller="QritterController">
+            <ul class="list-group">
+              <li class="list-group-item" ng-repeat="qritter in qritters">
+                <div>
+                  <div>
+                    <div>
+                      <strong><a ng-click="showThisGuy($index)" class="pointer">{{qritter.name}}</a></strong>
+                      <button class="btn-success pull-right" ng-click="results(qritter._id, $index)" ng-disabled="qritter.dispatched">Mission Results</button>
+                      <button class="btn-primary pull-right" ng-click="dispatch(qritter._id, $index)">Send on Mission</button>
+                    </div>
+                    <br />
+                    <div class="well" ng-show="showGuys[$index]">
+                      {{ qritter.name }}<br />
+                      {{ qritter.rarity }}<br />
+                      {{ qritter.level }}<br />
+                    </div>
+                  </div>
+                  <br />
+                  <div>
+                    <!--<progressbar class="progress-striped active" value="progressArray[$index] || 100" type="success">Ready For Mission</progressbar> -->
+                    <progressbar class="progress-striped active" value="progressArray[$index] || 100" type="{{ progressStyle[$index] || 'success'}}"><b ng-show="showDispatchedText[$index]">On mission...</b><b ng-hide="showDispatchedText[$index]">Ready for Mission</b></progressbar>
+                    <!-- ok, that value="progress" up there? yeah, don't do {{ progress }}, angular wants that progress variable
+                         to be a bareword..progress is NOT an html static attribute, that value="progress" attribute is in fact
+                         bound to angular's model..or whatever. -->
+
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">Inventory</div>
+          <div class="panel-body" ng-controller="InventoryController">
+            <ul>
+              <li ng-repeat="item in items">{{item.name}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+</div>

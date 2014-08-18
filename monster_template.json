@@ -1,0 +1,104 @@
+{
+     name: "Gremlin Eye-Poker",
+    level: 1,
+     type: "Melee",
+    qlass: "Gremlin",
+   rarity: "Hero",
+  starter: true,
+    bound: true,
+  gear: {
+    weapon: {
+      name: "Eye Poker",
+      type: "Melee",
+    rarity: "Common",
+    damage: 2
+    },
+    armor: {
+      helmet: {
+        name: "Copper Helmet",
+      rarity: "Common",
+       armor: 2
+      },
+      body: {
+        name: "Brigandine",
+      rarity: "Uncommon",
+       armor: 6
+      },
+      feet: {
+         name: "Worn Shoes",
+       rarity: "Trash",
+        armor: 1
+      }
+    }
+  }
+}
+
+{
+     name: "Goblin Brute",
+    level: 1,
+     type: "Melee",
+    qlass: "Goblin",
+   rarity: "Common",
+  starter: true,
+    bound: true,
+  gear: {
+    weapon: {
+      name: "Broken Sword",
+      type: "Melee",
+    rarity: "Trash",
+    damage: 1
+    },
+    armor: {
+      body: {
+        name: "Leather Armor",
+      rarity: "Ultra Common",
+       armor: 3
+      }
+    }
+  }
+}
+
+{
+     name: "Gremlin Snot Launcher",
+    level: 1,
+     type: "Ranged",
+    qlass: "Gremlin",
+   rarity: "Common",
+  starter: true,
+    bound: true,
+  gear: {
+    weapon: {
+      name: "Snot Rocket",
+      type: "Ranged",
+    rarity: "Trash",
+    damage: 2
+    },
+    armor: {
+      body: {
+        name: "Tattered Rags",
+      rarity: "Trash",
+       armor: 2
+      }
+    }
+  }
+}
+
+{
+     name: "Goblin Smithy",
+    level: 1,
+     type: "Crafter",
+    qlass: "Goblin",
+   rarity: "Uncommon",
+  starter: true,
+    bound: true,
+}
+
+{
+     name: "Elvin Gatherer",
+    level: 1,
+     type: "Gatherer",
+    qlass: "Elf",
+   rarity: "Common",
+  starter: true,
+    bound: true,
+}

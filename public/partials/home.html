@@ -1,0 +1,231 @@
+<div ng-controller="HomeController">
+Home controller says: {{ home }}
+
+<div ng-controller="TestController"><button ng-click="showDude()">Show Dude</button> {{ dude }}</div>
+
+<div class="row">
+  <div class="col-md-9">
+    <h1>stupid game thing</h1>
+    <div class="row">
+      <div class="col-md-6">
+
+        <!-- sign in form -->
+        <p>Sign in here if you already have an account to play this dumb game.</p>
+        <div ng-controller="SigninController">
+          <form role="signinForm" name="signinForm" ng-submit="login()" novalidate>
+
+            <!--
+              
+              Sign in:login
+
+            -->
+
+            <div ng-class="{'has-success': signinForm.login.$valid, 'has-error': !signinForm.login.$valid && !signinForm.login.$pristine || errorLogin}" class="form-group has-feedback">
+              <label for="login">Login:</label>
+              <input type="text" 
+                    class="form-control" 
+                       id="login" 
+                     name="login"
+                 ng-model="existingUser.login"
+               ng-pattern="word"
+             ng-minlength=3
+             ng-maxlength=20
+              placeholder="your login name"
+                 required>
+              <span ng-class="{'glyphicon-ok': signinForm.login.$valid, 'glyphicon-remove': !signinForm.login.$valid && !signinForm.login.$pristine || errorLogin}" class="glyphicon form-control-feedback"></span>
+              <div class="error-container" ng-show="signinForm.login.$dirty && signinForm.login.$invalid">
+                <small class="error" ng-show="signinForm.login.$error.required">Please enter a user name</small>
+                <small class="error" ng-show="signinForm.login.$error.minlength">Login name must be at least 3 characters</small>
+                <small class="error" ng-show="signinForm.login.$error.maxlength">Login name must not be longer than 20 characters</small>
+              </div>
+              <small class="error" ng-show="errorLogin">{{ errorLoginMessage }}</small>
+            </div>
+            
+            <!--
+              
+              Sign in:password
+
+            -->
+
+            <div ng-class="{'has-success': signinForm.password.$valid, 'has-error': !signinForm.password.$valid && !signinForm.password.$pristine || errorLogin }" class="form-group has-feedback">
+              <label for="password">Password:</label>
+              <input type="password" 
+                    class="form-control" 
+                       id="password"
+                     name="password"
+                 ng-model="existingUser.password"
+             ng-minlength=4
+             ng-maxlength=20
+              placeholder="your password"
+                 required>
+              <span ng-class="{'glyphicon-ok': signinForm.password.$valid, 'glyphicon-remove': !signinForm.password.$valid && !signinForm.password.$pristine || errorLogin}" class="glyphicon form-control-feedback"></span>
+              <div class="error-container" ng-show="signinForm.password.$dirty && signinForm.password.$invalid">
+                <small class="error" ng-show="signinForm.password.$error.required">Please enter your password</small>
+                <small class="error" ng-show="signinForm.password.$error.minlength">Password must be at least 4 characters</small>
+                <small class="error" ng-show="signinForm.password.$error.maxlength">Password must not be longer than 20 characters</small>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Login Now</button>
+          </form>
+        </div>
+
+      </div>
+      <div class="col-md-6">
+
+        <!-- 
+          
+          sign up form 
+          
+        -->
+        <p>Or, if you don't already have an account to play this dumb game, create one below so you can begin playing this dumb game.</p>
+        <div ng-controller="SignupController">
+          <form role="signupForm" name="signupForm" ng-submit="createAccount()" novalidate>
+
+            <!-- 
+              
+              Create account:login
+
+            -->
+
+            <div ng-class="{'has-success': signupForm.login.$valid, 'has-error': !signupForm.login.$valid && !signupForm.login.$pristine}" class="form-group has-feedback">
+              <label for="login">Desired Login Name:</label>
+              <input type="text" 
+                    class="form-control" 
+                       id="login" 
+                     name="login" 
+              placeholder="pick a user name" 
+                 ng-model="newUser.login" 
+               ng-pattern="word" 
+          login-available="login"
+             ng-minlength=3
+             ng-maxlength=20
+             autocomplete="off"
+                 required>
+              <span ng-class="{'glyphicon-ok': signupForm.login.$valid, 'glyphicon-remove': !signupForm.login.$valid && !signupForm.login.$pristine}" class="glyphicon form-control-feedback"></span>
+              <div class="error-container" ng-show="signupForm.login.$dirty && signupForm.login.$invalid">
+                <small class="error" ng-show="signupForm.login.$error.required">Please enter a user name</small>
+                <small class="error" ng-show="signupForm.login.$error.available">Sorry, that login is unavailable</small>
+                <small class="error" ng-show="signupForm.login.$error.minlength">Login name must be at least 3 characters</small>
+                <small class="error" ng-show="signupForm.login.$error.maxlength">Login name must not be longer than 20 characters</small>
+              </div>
+              <small class="error" ng-show="errorLogin">{{ errorLoginMessage }}</small>
+            </div>
+
+            <!--
+
+              Create account:password
+
+            -->
+
+            <div ng-class="{'has-success': signupForm.password.$valid, 'has-error': !signupForm.password.$valid && !signupForm.password.$pristine}" class="form-group has-feedback">
+              <label for="password">Pick A Password:</label>
+              <input type="password" 
+                    class="form-control" 
+                       id="password" 
+                     name="password" 
+              placeholder="pick a password" 
+                 ng-model="newUser.password"
+                   equals="{{newUser.password_confirm}}"
+             ng-minlength=4
+             ng-maxlength=20
+                 required>
+              <span ng-class="{'glyphicon-ok': signupForm.password.$valid, 'glyphicon-remove': !signupForm.password.$valid && !signupForm.password.$pristine}" class="glyphicon form-control-feedback"></span>
+              <div class="error-container" ng-show="signupForm.password.$dirty && signupForm.password.$invalid">
+                <small class="error" ng-show="signupForm.password.$error.required">Please enter a password</small>
+                <small class="error" ng-show="signupForm.password.$error.minlength">Password must be at least 4 characters</small>
+                <small class="error" ng-show="signupForm.password.$error.maxlength">Password must not be longer than 20 characters</small>
+                <small class="error" ng-show="signupForm.password.$error.equals">Your passwords do not match</small>
+              </div>
+              <small class="error" ng-show="errorPassword">{{ errorPasswordMessage }}</small>
+            </div>
+
+            <!-- 
+            
+              Create account:password_confirm
+
+            -->
+
+            <div ng-class="{'has-success': signupForm.password_confirm.$valid, 'has-error': !signupForm.password_confirm.$valid && !signupForm.password_confirm.$pristine}" class="form-group has-feedback">
+              <label for="password_confirm">Confirm Your Password:</label>
+              <input type="password" 
+                    class="form-control" 
+                       id="password_confirm" 
+                     name="password_confirm" 
+              placeholder="type it again" 
+                 ng-model="newUser.password_confirm" 
+                   equals="{{newUser.password}}"
+             ng-minlength=4
+             ng-maxlength=20
+                 required>
+              <span ng-class="{'glyphicon-ok': signupForm.password_confirm.$valid, 'glyphicon-remove': !signupForm.password_confirm.$valid && !signupForm.password_confirm.$pristine}" class="glyphicon form-control-feedback"></span>
+              <div class="error-container" ng-show="signupForm.password_confirm.$dirty && signupForm.password_confirm.$invalid">
+                <small class="error" ng-show="signupForm.password_confirm.$error.required">Please confirm your password</small>
+                <small class="error" ng-show="signupForm.password_confirm.$error.minlength">Password confirmation must be at least 4 characters</small>
+                <small class="error" ng-show="signupForm.password_confirm.$error.maxlength">Password confirmation must not be longer than 20 characters</small>
+                <small class="error" ng-show="signupForm.password_confirm.$error.equals">Your passwords do not match</small>
+              </div>
+              <small class="error" ng-show="errorPasswordConfirm">{{ errorPasswordConfirmMessage }}</small>
+            </div>
+
+            <!--
+
+              Create account:email
+
+            -->
+            
+            <div ng-class="{'has-success': signupForm.email.$valid, 'has-error': !signupForm.email.$valid && !signupForm.email.$pristine}" class="form-group has-feedback">
+              <label for="email">Email:</label>
+              <input type="email" 
+                    class="form-control" 
+                       id="email" 
+                     name="email" 
+              placeholder="no spam. promise :)" 
+                 ng-model="newUser.email" 
+             ng-minlength=5
+             ng-maxlength=20
+                 required>
+              <span ng-class="{'glyphicon-ok': signupForm.email.$valid, 'glyphicon-remove': !signupForm.email.$valid && !signupForm.email.$pristine}" class="glyphicon form-control-feedback"></span>
+              <div class="error-container" ng-show="signupForm.email.$dirty && signupForm.email.$invalid">
+                <small class="error" ng-show="signupForm.email.$error.required">Please enter an email - we will not spam you or sell your info</small>
+                <small class="error" ng-show="signupForm.email.$error.minlength">Your email must be at least 5 characters</small>
+                <small class="error" ng-show="signupForm.email.$error.maxlength">Your email must not be longer than 20 characters</small>
+                <small class="error" ng-show="signupForm.email.$error.email">Your email appears to be invalid</small>
+              </div>
+              <small class="error" ng-show="errorEmail">{{ errorEmailMessage }}</small>
+            </div>
+
+            <!--
+              
+              Create account:dob fields
+
+            -->
+
+            <p>
+            <div class="row">
+              <div class="col-xs-3">
+                <label for="month">Birth Month:</label>
+                <select class="form-control" name="month" id="month" ng-model="newUser.selectedMonth" ng-options="month.name for month in months" required></select>
+              </div>
+              <div class="col-xs-3">
+                <label for="day">Birth Day:</label>
+                <select class="form-control" name="day" id="day" ng-model="newUser.selectedDay" ng-options="day.day for day in days" required></select>
+              </div>
+              <div class="col-xs-3">
+                <label for="year">Birth Year:</label>
+                <select class="form-control" name="year" id="year" ng-model="newUser.selectedYear" ng-options="year.year for year in years" required></select>
+              </div>
+            </div>
+            </p>
+
+            <p>
+              <button type="submit" class="btn btn-primary" ng-disabled="signupForm.$invalid">Create Account Now</button>
+            </p>
+          </form>
+        </div>
+
+      </div>
+    </div> 
+  </div>
+</div>
+
+</div>

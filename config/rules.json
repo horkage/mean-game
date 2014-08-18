@@ -1,0 +1,25 @@
+{
+  "rules" : {
+    "rarity" : {
+      "Trash" : "1-35",       // 35
+      "Common" : ,
+      "Uncommon" : ,
+      "Rare" : "75-90",       // 15
+      "Ultra Rare" : "90-99", //  9
+      "Heroic" : "100-100"    //  1
+      
+    }
+  }                               
+}
+
+
+
+29 trash
+24 ultra common
+19 common
+14 uncommon
+09 rare
+04 ultra rare
+ 1 heroic
+
+100

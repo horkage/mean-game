@@ -1,0 +1,150 @@
+Storyboard for dispatching dudes
+
+*) display ul/li list of dudes and a HUD for each dude
+  *) click dude name to see dude details
+  *) click dude action button to what dude can do (for now)
+  *) each dude in list will show a dynamic progress bar indicating how
+     far along each dude is in performing that specific dude's task, i.e;
+     crafting, fighting or gathering
+
+  *) if dude is busy, the progress bar shows that that dude is busy and
+     cannot do anything until that task is complete
+
+if the specified dude isn't already busy, dead or otherwise gone, then:
+  if dude's type is combat then dude's button shows combat options/actions
+  if dude's type is crafter then dude's button shows crafting options/actions
+  if dude's type is gatherer then dude's button shows gathering options/actions
+
+...actually, let's simplify this and get the absolute basics working and build
+upon the basics instead of doing way too much out of the gate.  Let's do 
+incremental steps that can be managed trivially with git checkpoints.  Let's also
+take the approach that we'll refactor AS NEEDED as much as possible instead of
+anticipating stuff. (otherwise it'll never get done)
+
+First, you need to see a list of dudes..got that.
+Next, you need to be able to send a fighting guy away to pick a fight.
+For now, we'll assume all dudes are fighters.  Let's get basic PVE fighting done.
+Then worry about the other classes.
+
+So, let's define what it means when 'fighting is done.'  Fighting, for now, means
+that you dispatch a dude, a progress bar dynamically indicates that the dude is
+off doing something.  When the progress bar fills up to completion, the dude "returns"
+with the spoils of war and his activity button becomes enabled again.  So, let's break
+this very complex process down into managable bits.  
+
+When that button is clicked, two things need to happen - the server needs to be told
+that the specified dude is going on a mission __AND__ the UI has to update in a meaningful 
+way indicating that that dude is now gone for a set amount of time.
+
+=========================================================================================
+==[DISPATCHING A FIGHTING DUDE]==========================================================
+=========================================================================================
+1. When the dispatch button is clicked, make a request to node with the dude id via
+/dispatch/:dude_id.  That should be all we need to send.  The dispatch button immediately
+becomes disabled.
+
+2. /dispatch/:dude_id will respond with the server's time.  When that response is received
+(likely via promise) the progress bar must change its state from full to empty, and then 
+begin filling up. Other visual cues should be activated also that indicate that the dude 
+that was just dispatched can no longer be interacted with (grey-out his entire line-item)
+
+3. Now that the user sees that the dude is "gone," the server takes over from here and the user
+is free to manage other things and continue playing the stupid game.  Meanwhile, the row
+that shows that dude will have a progress bar slowly filling up to completion while the
+player manages other tasks.
+
+4. When the progress bar fills completely,  activate the results button by making it
+clickable, but keep all other element related to that dude (dispatch button/progress bar)
+disabled. When that button is clicked make the fetch request for the results payload, 
+and just keep that dude's id as an arg to that ng-click bound to the results button.  
+That way, requests are made only when they are wanted and makes managing the control-flow 
+much easier (user-event-based). The endpoint could be /results/:dude_id.
+
+5. The player clearly sees that there is some action that requires their attention.  When
+the player clicks on the results button, a hidden panel appears with a mission debrief
+of sorts.  How much xp was earned, a list of items brought back, a new dude, and so on.
+
+I guess this presumes I'm now going to be dealing with an encounter result object...
+
+6. At any rate, the player can review the results screen and click a big "Done" or "OK"
+button.  When that button is clicked, the items are deposited into the player's 
+inventory, any dudes are attached to their account, any gold is deposited into their
+coffers, the review screen is dismissed and the "Dispatch" and progress bars reset 
+to their default states (which, I guess, is a "ready" state).
+
+7. PERHAPS...it would be kinda neat to show a progress bar that represents the HP of the dude.
+The dude may need to "heal" over time before he can be dispatched again - or even better -
+you can immediately dispatch a dude whenever you want, but in order for him to recover, 
+it requires time (like 1min = 1hp or something with items that modify the rates) For now, 
+I think that would be too much for getting "fighting done."  Let's just not worry about
+that "mechanic" for the purposes of where we are at right now.
+
+What needs to happen on the server, then?  That is the $64,000 question..
+
+The route instantiates the dude and kicks him off to a pool.  The server's main setInterval
+fishes him out of that pool and matches him up against a PVE opponent. Will have to do a
+map range that maps a percentage to the rarity of monster to fight.  Roll that range.  
+Select all the monsters with that range classification, then select a random one as the match.
+The player's dude will always have initiative (for now, without going berzerk with mechanics)
+
+Once an opponent has been instantiated, then both the dude and the opponent objects are thrown
+into a recursive function that fires while both dudes are alive.  Remember to use a setTimeout
+ensuring you release control of the event loop back to node.  The beginning of this
+recursive function will check whose turn it is and at the end of the recursive function it
+will flip whose turn it is for the next recursive iteration and send them both.
+
+(see ./psudocode.js, got mockup prototype working)
+
+Once the fight is over, stuff the dude into a results pool.  Then, when the player clicks the result
+button (asynchronously), angular will make a call to /results/:dude_id and pop _id dude off that 
+results pool array and send the dude down the pipe with the spoils attached to himself in a results
+object.
+
+(NOTES:
+  ==name==           [dispatch]
+    ==hidden details==
+  ==progress bar==   [results]  <-- shiny, green spiffy candy-like button
+    ==hidden mission results==)
+
+(NOTES: it might be a good idea to start thinking in "states" at this point.  Elements are
+going to have a state, dudes will have a state, buttons will have a state, etc...)
+
+(NOTES: When you dispatch a dude, the dude "goes away" and the progress bar begins to fill.
+Maybe a good way to do this, is the dude's fighting is done instantly on the server.
+But maybe I can fire an event when the progress bar completes to 100% that hits an
+endpoint and retrieves the results of the mission.)
+
+(NOTES: The progessbar, when full, should indicate the text somehow "Ready for Mission," or,
+turn green, or something. It's also looking like progress bars will need to implement a "state."
+A default state and an active state.  Default would mean that there's no animation, it shows
+"Ready" text or something.  Active means that it no longer shows "Ready", it instead shows a 
+percentage, AND that it is animating (filling up))
+
+(NOTES: We will likely need a TimeService in angular or something bound on the $rootScope to
+indicate server time that will be available/broadcastable or whatever through the entire app..
+maybe a .run() $rootScope -> setInterval $scope.$apply thing so that the client always has
+synchronized time with the server)
+
+(NOTES: 
+db.users.findOne({login: "hork"}).qritters.filter(function(qritter) { return qritter.id == "53542119ad68178eb9243f80"})
+)
+
+(NOTES:
+db.qritters.update( { name: "Rare Punk" }, { $set: { rarity: "Rare" } } )
+)
+
+(NOTES: Need to add exp to qritter model. duh.)
+
+(NOTES: I think dude objects might need a dispatch property to store their dispatch times.
+That way, when the game panel is loaded and the dudes are iterated over to display, the 
+client will know how it should display the dispatch button, result button and what state to
+display the progress bar.  This way, the player should be protected from disconnects/outages)
+
+(NOTES: There is an angular-ui component that lets you scroll for infinity...might be useful for dude list)
+
+(NOTES: Look into the angular ui-router component..the example page looked absolutely amazing...well, snazzy
+animations aside)
+
+(NOTES: USE UNDERSCORE FOR NODE)
+
+

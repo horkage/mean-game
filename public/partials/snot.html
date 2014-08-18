@@ -1,0 +1,108 @@
+<div ng-controller="SnotController">
+  <h3><a class="pointer" ng-click="showCritters = !showCritters">Qritters</a></h3>
+  <div class="row well" ng-show="showCritters">
+    <div class="col-md-6">
+      <form role="qritterForm" name="qritterForm" ng-submit="saveQritter()" novalidate>
+        <p><input type="text" id="name" name="name" ng-model="qritter.name" placeholder="qritter name"></p>
+        <p><input type="number" id="level" name="level" ng-model="qritter.level" placeholder="1"></p>
+        <p><input type="text" id="type" name="type" ng-model="qritter.type" placeholder="Combat|Gatherer|Crafter"></p>
+        <p><input type="text" id="qlass" name="qlass" ng-model="qritter.qlass" placeholder="Goblin"></p>
+        <p><input type="text" id="rarity" name="rarity" ng-model="qritter.rarity" placeholder="Trash"></p>
+        <p>starter: <input type="checkbox" id="starter" name="qritter.starter" ng-model="qritter.starter"></p>
+        <p>bound: <input type="checkbox" id="bound" name="qritter.bound" ng-model="qritter.bound"></p>
+        <p><input type="text" id="img" name="img" ng-model="qritter.img" placeholder="/images/qritters/themes"></p>
+        <p><button class="btn btn-primary" type="submit">Qreate Qritter</button></p>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <ul class="list-group">
+        <li class="list-group-item well" ng-repeat="qritter in qritters">
+          <a ng-click="bob = !bob" class="pointer">{{ qritter.name }}</a><button class="btn btn-primary pull-right" type="button" ng-click="deleteQritter(qritter)">Delete</button>
+          <div ng-show="bob">
+            level: {{ qritter.level }}<br>
+            type: {{ qritter.type }}<br>
+            qlass: {{ qritter.qlass }}<br>
+            rarity: {{ qritter.rarity }}<br>
+            starter: {{ qritter.starter }}<br>
+            bound: {{ qritter.bound }}<br>
+            image: {{ qritter.img }}<br>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <h3><a class="pointer" ng-click="showWeapons = !showWeapons">Weapons</a></h3>
+  <div class="row well" ng-show="showWeapons">
+    <div class="col-md-6">
+      <form role="weaponForm" name="weaponForm" ng-submit="saveWeapon()" novalidate>
+        <p><input type="text" id="name" name="name" ng-model="weapon.name" placeholder="weapon name"></p>
+        <p><input type="text" id="type" name="type" ng-model="weapon.type" placeholder="weapon type"></p>
+        <p><input type="text" id="rarity" name="rarity" ng-model="weapon.rarity" placeholder="Trash"></p>
+        <p><input type="number" id="damage" name="damage" ng-model="weapon.damage" placeholder="1"></p>
+        <p><input type="text" id="img" name="img" ng-model="weapon.img" placeholder="/images/weapon"></p>
+        <p><button class="btn btn-primary" type="submit">Create Weapon</button></p>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <ul class="list-group">
+        <li class="list-group-item well" ng-repeat="weapon in weapons">
+          <a ng-click="bob = !bob">{{ weapon.name }}</a><button class="btn btn-primary pull-right" type="button" ng-click="deleteWeapon(weapon)">Delete</button>
+          <div ng-show="bob">
+            type: {{ weapon.type }}<br>
+            rarity: {{ weapon.rarity }}<br>
+            damage: {{ weapon.damage }}<br>
+            image: {{ weapon.img }}<br>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <h3><a class="pointer" ng-click="showArmor = !showArmor">Armor</a></h3>
+  <div class="row well" ng-show="showArmor">
+    <div class="col-md-6">
+      <form role="armorForm" name="armorForm" ng-submit="saveArmor()" novalidate>
+        <p><input type="text" id="name" name="name" ng-model="armor.name" placeholder="armor name"></p>
+        <p><input type="text" id="type" name="type" ng-model="armor.type" placeholder="body|hands|feet|head"></p>
+        <p><input type="text" id="rarity" name="rarity" ng-model="armor.rarity" placeholder="Trash"></p>
+        <p><input type="number" id="armor" name="armor" ng-model="armor.armor" placeholder="1"></p>
+        <p><input type="text" id="img" name="img" ng-model="armor.img" placeholder="/images/armor"></p>
+        <p><button class="btn btn-primary" type="submit">Create Armor</button></p>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <ul class="list-group">
+        <li class="list-group-item well" ng-repeat="armor in armors">
+          <a class="pointer" ng-click="bob = !bob">{{ armor.name }}</a><button class="btn btn-primary pull-right" type="button" ng-click="deleteArmor(armor)">Delete</button>
+          <div ng-show="bob">
+            type: {{ armor.type }}<br>
+            rarity: {{ armor.rarity }}<br>
+            armor: {{ armor.armor }}<br>
+            image: {{ armor.img }}<br>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <h3><a class="pointer" ng-click="showItems = !showItems">Items</a></h3>
+  <div class="row well" ng-show="showItems">
+    <div class="col-md-6">
+      <form role="itemForm" name="itemForm" ng-submit="saveItem()" novalidate>
+        <p><input type="text" id="name" name="name" ng-model="item.name" placeholder="item name"></p>
+        <p><input type="text" id="rarity" name="rarity" ng-model="item.rarity" placeholder="Trash"></p>
+        <p><input type="text" id="img" name="img" ng-model="item.img" placeholder="/images/items"></p>
+        <p><button class="btn btn-primary" type="submit">Create Item</button></p>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <ul class="list-group">
+        <li class="list-group-item well" ng-repeat="item in items">
+          <a class="pointer" ng-click="bob =! bob">{{ item.name }}</a><button class="btn btn-primary pull-right" type="button" ng-click="deleteItem(item)">Delete</button>
+          <div ng-show="bob">
+            rarity: {{ item.rarity }}<br>
+            image: {{ item.img }}<br>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
